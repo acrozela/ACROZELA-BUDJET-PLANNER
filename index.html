@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ACROZELA Budget Planner - Free Finance Tool for managing your daily expenses and income with Indian Currency support.">
+    <meta name="keywords" content="Budget Planner, FINANCE, acrozela Budget Planner, Expense Tracker India">
+    <title>ACROZELA Budget Planner | Professional Finance Tool</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        header h1 {
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card .amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .income-text { color: var(--success); }
+        .expense-text { color: var(--danger); }
+        .balance-text { color: var(--primary); }
+
+        /* Form Section */
+        .planner-main {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .planner-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* List Section */
+        .history-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .list-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: #fcfcfc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #transaction-list {
+            list-style: none;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .transaction-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .transaction-info span {
+            font-size: 0.75rem;
+            color: var(--secondary);
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+            background: var(--card-bg);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ACROZELA BUDGET PLANNER</h1>
+    </header>
+
+    <div class="container">
+        <!-- Summary Dashboard -->
+        <div class="summary-grid">
+            <div class="card">
+                <h3>Total Income</h3>
+                <div id="total-income" class="amount income-text">₹0.00</div>
+            </div>
+            <div class="card">
+                <h3>Total Expenses</h3>
+                <div id="total-expense" class="amount expense-text">₹0.00</div>
+            </div>
+            <div class="card">
+                <h3>Available Balance</h3>
+                <div id="total-balance" class="amount balance-text">₹0.00</div>
+            </div>
+        </div>
+
+        <div class="planner-main">
+            <!-- Entry Form -->
+            <section>
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.2rem;">Add New Transaction</h2>
+                    <form id="budget-form">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" id="description" placeholder="e.g., Salary, Rent, Groceries" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (INR)</label>
+                            <input type="number" id="amount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Transaction Type</label>
+                            <select id="type">
+                                <option value="income">Income (+)</option>
+                                <option value="expense">Expense (-)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Transaction</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- History List -->
+            <section>
+                <div class="history-container">
+                    <div class="list-header">
+                        <h2 style="font-size: 1.1rem;">Transaction History</h2>
+                        <button id="clear-all" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.8rem;">Clear All</button>
+                    </div>
+                    <ul id="transaction-list">
+                        <!-- Items injected by JS -->
+                    </ul>
+                    <div id="empty-msg" class="empty-state">
+                        <p>No transactions added yet. Dashboard is empty.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        ACROZELA Budget Planner &bull; Professional Finance Tool Builder
+    </footer>
+
+    <script>
+        const form = document.getElementById('budget-form');
+        const descriptionInput = document.getElementById('description');
+        const amountInput = document.getElementById('amount');
+        const typeInput = document.getElementById('type');
+        const transactionList = document.getElementById('transaction-list');
+        const emptyMsg = document.getElementById('empty-msg');
+        
+        const totalBalanceDisplay = document.getElementById('total-balance');
+        const totalIncomeDisplay = document.getElementById('total-income');
+        const totalExpenseDisplay = document.getElementById('total-expense');
+
+        // State Management
+        let transactions = JSON.parse(localStorage.getItem('acrozela_transactions')) || [];
+
+        // Format Currency to Indian Rupee
+        const formatCurrency = (num) => {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 2
+            }).format(num);
+        };
+
+        // Update Dashboard Values
+        function updateDashboard() {
+            const amounts = transactions.map(t => t.type === 'income' ? t.amount : -t.amount);
+            
+            const total = amounts.reduce((acc, item) => (acc += item), 0);
+            
+            const income = transactions
+                .filter(t => t.type === 'income')
+                .reduce((acc, t) => (acc += t.amount), 0);
+            
+            const expense = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((acc, t) => (acc += t.amount), 0);
+
+            totalBalanceDisplay.innerText = formatCurrency(total);
+            totalIncomeDisplay.innerText = formatCurrency(income);
+            totalExpenseDisplay.innerText = formatCurrency(expense);
+
+            // Toggle Empty State
+            emptyMsg.style.display = transactions.length === 0 ? 'block' : 'none';
+        }
+
+        // Render List
+        function renderTransactions() {
+            transactionList.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const li = document.createElement('li');
+                li.classList.add('transaction-item');
+                
+                const isIncome = transaction.type === 'income';
+                
+                li.innerHTML = `
+                    <div class="transaction-info">
+                        <h4>${transaction.description}</h4>
+                        <span>${transaction.date}</span>
+                    </div>
+                    <div class="transaction-amount ${isIncome ? 'income-text' : 'expense-text'}">
+                        ${isIncome ? '+' : '-'}${formatCurrency(transaction.amount)}
+                        <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">Delete</button>
+                    </div>
+                `;
+                
+                transactionList.appendChild(li);
+            });
+        }
+
+        // Add Transaction
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (descriptionInput.value.trim() === '' || amountInput.value.trim() === '') {
+                alert('Please provide valid details');
+                return;
+            }
+
+            const transaction = {
+                id: Math.floor(Math.random() * 1000000),
+                description: descriptionInput.value,
+                amount: parseFloat(amountInput.value),
+                type: typeInput.value,
+                date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+            };
+
+            transactions.push(transaction);
+            updateLocalStorage();
+            init();
+            
+            form.reset();
+        });
+
+        // Delete Transaction
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            updateLocalStorage();
+            init();
+        }
+
+        // Clear All
+        document.getElementById('clear-all').addEventListener('click', () => {
+            if(confirm('Are you sure you want to clear all data?')) {
+                transactions = [];
+                updateLocalStorage();
+                init();
+            }
+        });
+
+        function updateLocalStorage() {
+            localStorage.setItem('acrozela_transactions', JSON.stringify(transactions));
+        }
+
+        function init() {
+            renderTransactions();
+            updateDashboard();
+        }
+
+        // Initialize App
+        init();
+    </script>
+</body>
+</html>
